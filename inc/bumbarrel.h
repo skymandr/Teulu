@@ -62,7 +62,7 @@ typedef struct bumbarrel {
     SDL_Rect        src_rect;
     bumbarrel_state state;
     int             frame;
-    int             last_frame;
+    uint            last_frame;
     mobs_mob        mob;
 } bumbarrel;
 

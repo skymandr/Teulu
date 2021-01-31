@@ -2,6 +2,7 @@
 *.swo
 *,e1f
 *,ddc
+*,a91
 *.zip
 .vscode
 obj/*

@@ -59,7 +59,7 @@ static void main_handle_mouse_press(SDL_MouseButtonEvent key);
 
 // Main entry function:
 int main(int argc, char* args[]) {
-    int status;
+    int status = 0;
 
     if (argc > 1) {
         for (int i = 1; i < argc; i++) {
@@ -293,12 +293,14 @@ static void main_draw(void) {
     );
 
     if (main_softscale != 1) {
+        SDL_Surface* scaled = rotozoomSurface(screen, 0, main_softscale, FALSE);
         SDL_BlitSurface(
-            rotozoomSurface(screen, 0, main_softscale, FALSE),
+            scaled,
             NULL,
             main_screen,
             NULL
         );
+        SDL_FreeSurface(scaled);
     }
 
     SDL_Flip(main_screen);

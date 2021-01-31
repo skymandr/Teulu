@@ -77,7 +77,7 @@ mobs_mob mobs_new(void) {
 static void mobs_move(mobs_mob* mob, double timestep) {
     mob->pos.x += mob->vel.x * timestep;
     mob->pos.y += mob->vel.y * timestep;
-};
+}
 
 
 // Apply boundary conditions:

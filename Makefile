@@ -10,13 +10,13 @@ ODIR = obj
 IDIR = inc
 
 # Linking:
-LDFLAGS = -lSDL -lSDL_image -lSDL_mixer -lSDL_gfx -lm
+LDFLAGS = -lpthread -lSDL -lSDL_image -lSDL_mixer -lSDL_gfx -lm
 
 # Compiler options:
-CFLAGS = -std=gnu99 -I$(IDIR) $(LDFLAGS)
+CFLAGS = -std=gnu99 -I$(IDIR) $(LDFLAGS) -W -Wall -Wextra -pedantic
 
 # Objects:
-_OBJ = main.o bugs.o bumbarrel.o mobs.o predators.o screen.o sprites.o
+_OBJ = main.o bumbarrel.o mobs.o screen.o sprites.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 # Targets:
