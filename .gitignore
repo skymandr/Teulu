@@ -1,0 +1,11 @@
+*.swp
+*.swo
+*,e1f
+*,ddc
+*.zip
+obj/*
+temp/*
+*Teulu/*Help
+*Teulu/ReleaseNotes
+*Teulu/LICENSE
+teulu
