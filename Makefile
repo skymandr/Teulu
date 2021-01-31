@@ -20,7 +20,7 @@ _OBJ = main.o bugs.o bumbarrel.o mobs.o predators.o screen.o sprites.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 # Targets:
-all: teulu
+all: teulu dist
 
 $(ODIR)/%.o: $(SRCDIR)/%.c $(IDIR)/%.h $(ODIR)
 	$(CC) -c -o $@ $< $(CFLAGS)
@@ -31,6 +31,13 @@ $(ODIR):
 teulu: $(OBJ) $()
 	$(CC) -o $(BINARY) $^ $(CFLAGS)
 
+dist: teulu
+	mkdir -p Teulu
+	cp teulu Teulu
+	cp -r resources Teulu
+	cp README.md LICENSE Teulu
+	zip -r $(BINARY).zip Teulu/
+
 .PHONY: clean, cleanall
 
 clean:
@@ -38,3 +45,5 @@ clean:
 
 cleanall: clean
 	rm -f $(BINARY)
+	rm -rf Teulu/
+	rm -f $(BINARY).zip

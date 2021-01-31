@@ -15,6 +15,24 @@ Pleas note that most features listed below are not implemented, but are to be
 regarded as a statement of intent.
 
 
+## How to run
+The game has only been built and tested under GNU/Linux. To start the game on
+GNU/Linux, go to the game directory and write
+```console
+$ ./teulu
+```
+
+Note that the game natively runs windowed in 320x240 resolution. To up scale the window,
+use the `-s n` flag, where `n` is an integer upscaling factor, _e.g._
+```console
+$ ./teulu -s 3
+```
+to scale the window to 960x720 pixels.
+
+There is also a `-f` flag to force full screen mode, however, since this may mess up your
+display settings it is not recommended. Use at your own peril!
+
+
 ## Objective
 
 The objective varies a little during the seasons, but the main objective is
