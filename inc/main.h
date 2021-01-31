@@ -28,9 +28,10 @@
 
 /* Global definitions */
 
-#define MAIN_APP_NAME   "Teulu"
-#define MAIN_APP_VER    "v0.0.1"
-#define MAIN_APP_TITLE  MAIN_APP_NAME " " MAIN_APP_VER
+#define MAIN_APP_NAME       "Teulu"
+#define MAIN_APP_VER        "v0.0.1"
+#define MAIN_APP_FRAMERATE  50
+#define MAIN_APP_TITLE      MAIN_APP_NAME " " MAIN_APP_VER
 
 
 /* Global variables */

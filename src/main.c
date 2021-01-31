@@ -228,12 +228,15 @@ static void main_handle_mouse_press(SDL_MouseButtonEvent button) {
 
 // Main loop:
 static int main_loop(void) {
+    int last_update = 0;
 
     while(!main_quit_flag) {
         main_events();
-        bumbarrel_update(&main_player);
-        main_draw();
-        SDL_Delay(100);
+        if (SDL_GetTicks() - last_update > 1000 / MAIN_APP_FRAMERATE) {
+            bumbarrel_update(&main_player);
+            main_draw();
+            last_update = SDL_GetTicks();
+        }
     }
     return 0;
 }

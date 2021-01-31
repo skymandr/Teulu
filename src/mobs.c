@@ -22,6 +22,8 @@
 
 #include <math.h>
 
+#include "SDL/SDL.h"
+
 #include "mobs.h"
 #include "screen.h"
 #include "util.h"
@@ -31,7 +33,7 @@
 
 static void mobs_boundary_conditions(mobs_mob* mob);
 static void mobs_move(mobs_mob* mob, double timestep);
-static void mobs_stop(mobs_mob* mob, double timestep);
+static void mobs_stop(mobs_mob* mob);
 static void mobs_drag(mobs_mob* mob, double timestep);
 static void mobs_gravity(mobs_mob* mob, double timestep);
 
@@ -39,12 +41,20 @@ static void mobs_gravity(mobs_mob* mob, double timestep);
 /* External function definitions */
 
 // Move a mob:
-void mobs_kinematics(mobs_mob* mob, double timestep) {
+void mobs_kinematics(mobs_mob* mob) {
+    double timestep = (double) (SDL_GetTicks() - mob->last_move) / 1000.0;
+
+    if (timestep <= 0) {
+        return;
+    }
+
     mobs_gravity(mob, timestep);
     mobs_drag(mob, timestep);
-    mobs_stop(mob, timestep);
+    mobs_stop(mob);
     mobs_move(mob, timestep);
     mobs_boundary_conditions(mob);
+
+    mob->last_move = SDL_GetTicks();
 }
 
 
@@ -98,11 +108,11 @@ static void mobs_boundary_conditions(mobs_mob* mob) {
 
 
 // Halt slow movement:
-static void mobs_stop(mobs_mob* mob, double timestep) {
-    if (fabs(mob->vel.x) < timestep) {
+static void mobs_stop(mobs_mob* mob) {
+    if (fabs(mob->vel.x) < 1) {
         mob->vel.x = 0;
     }
-    if (fabs(mob->vel.y) < timestep) {
+    if (fabs(mob->vel.y) < 1) {
         mob->vel.y = 0;
     }
 }
@@ -130,7 +140,7 @@ static void mobs_drag(mobs_mob* mob, double timestep) {
     if (mob->drag.y > 0 && mob->vel.y != 0) {
         drag = 0.5 * mob->drag.y * mob->vel.y * mob->vel.y * timestep;
         if (mob->vel.y > 0) {
-            mob->vel.y -= 0.75 * drag;
+            mob->vel.y -= 0.5 * drag;
         } else {
             mob->vel.y += drag;
         }

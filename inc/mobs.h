@@ -57,13 +57,14 @@ typedef struct mobs_mob {
     mobs_direction  dir;
     double          gravity;
     bool            periodic;
+    int             last_move;
 } mobs_mob;
 
 
 /* Function prototypes */
 
 // Move a mob:
-void mobs_kinematics(mobs_mob* mob, double timestep);
+void mobs_kinematics(mobs_mob* mob);
 
 // Get a new mob:
 mobs_mob mobs_new(void);

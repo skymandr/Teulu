@@ -42,7 +42,7 @@
 #define bumbarrel_SPRITE_SLEEP      4
 #define bumbarrel_SPRITE_SLEEP_NT   4
 #define bumbarrel_STATES_COUNT      7
-#define bumbarrel_SPEED             48
+#define bumbarrel_SPEED             144
 
 
 /* Type definitions */
@@ -62,6 +62,7 @@ typedef struct bumbarrel {
     SDL_Rect        src_rect;
     bumbarrel_state state;
     int             frame;
+    int             last_frame;
     mobs_mob        mob;
 } bumbarrel;
 

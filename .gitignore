@@ -3,6 +3,7 @@
 *,e1f
 *,ddc
 *.zip
+.vscode
 obj/*
 temp/*
 *Teulu/*Help

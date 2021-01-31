@@ -37,7 +37,7 @@ sprites_state bumbarrel_perch = {
     .pad    = bumbarrel_SPRITE_OFFS,
     .width  = bumbarrel_SPRITE_SIZE,
     .height = bumbarrel_SPRITE_SIZE,
-    .time   = 200,
+    .delay   = 200,
     .transitions = {
         {0.5, 0.7, 0.9, 1.0},
         {0.7, 0.0, 1.0, 0.0},
@@ -51,7 +51,7 @@ sprites_state bumbarrel_perch_no_tail = {
     .pad    = bumbarrel_SPRITE_OFFS,
     .width  = bumbarrel_SPRITE_SIZE,
     .height = bumbarrel_SPRITE_SIZE,
-    .time   = 200,
+    .delay   = 200,
     .transitions = {
         {0.5, 0.7, 0.9, 1.0},
         {0.7, 0.0, 1.0, 0.0},
@@ -65,7 +65,7 @@ sprites_state bumbarrel_fly = {
     .pad    = bumbarrel_SPRITE_OFFS,
     .width  = bumbarrel_SPRITE_SIZE,
     .height = bumbarrel_SPRITE_SIZE,
-    .time   = 125,
+    .delay   = 111,
     .transitions = {
         {0.0, 0.8, 0.0, 0.0, 1.0, 0.0},
         {0.2, 0.0, 0.6, 0.7, 0.0, 1.0},
@@ -81,7 +81,7 @@ sprites_state bumbarrel_glide = {
     .pad    = bumbarrel_SPRITE_OFFS,
     .width  = bumbarrel_SPRITE_SIZE,
     .height = bumbarrel_SPRITE_SIZE,
-    .time   = 167,
+    .delay   = 167,
     .transitions = {
         {0.4, 1.0},
         {0.2, 1.0},
@@ -93,7 +93,7 @@ sprites_state bumbarrel_land = {
     .pad    = bumbarrel_SPRITE_OFFS,
     .width  = bumbarrel_SPRITE_SIZE,
     .height = bumbarrel_SPRITE_SIZE,
-    .time   = 111,
+    .delay   = 83,
     .transitions = {
         {0.0, 1.0, 0.0},
         {0.0, 0.0, 1.0},
@@ -106,7 +106,7 @@ sprites_state bumbarrel_sleep = {
     .pad    = bumbarrel_SPRITE_OFFS,
     .width  = bumbarrel_SPRITE_SIZE,
     .height = bumbarrel_SPRITE_SIZE,
-    .time   = 500,
+    .delay   = 500,
     .transitions = {
         {0.6, 0.8, 0.9, 1.0},
         {0.2, 0.8, 0.9, 1.0},
@@ -120,7 +120,7 @@ sprites_state bumbarrel_sleep_no_tail = {
     .pad    = bumbarrel_SPRITE_OFFS,
     .width  = bumbarrel_SPRITE_SIZE,
     .height = bumbarrel_SPRITE_SIZE,
-    .time   = 500,
+    .delay   = 500,
     .transitions = {
         {0.6, 0.8, 0.9, 1.0},
         {0.2, 0.8, 0.9, 1.0},
@@ -182,7 +182,7 @@ void bumbarrel_update(bumbarrel* bbl) {
         }
         break;
     default:
-        mobs_kinematics(&(bbl->mob), 1e-2);
+        mobs_kinematics(&(bbl->mob));
         vel = bbl->mob.vel;
         if (vel.x > 0) {
             bbl->mob.dir = (bbl->mob.dir & ~mobs_DIR_HOR) | mobs_DIR_RIGHT;
@@ -237,13 +237,14 @@ void bumbarrel_fly_towards(util_vector pos, bumbarrel* bbl) {
     if (norm == 0) {
         return;
     }
-    util_vector speed = {
+    util_vector vel = {
         .x = bumbarrel_SPEED * delta.x / norm,
         .y = bumbarrel_SPEED * delta.y / norm
     };
 
-    bbl->mob.vel.x += speed.x;
-    bbl->mob.vel.y += speed.y;
+    bbl->mob.vel.x += vel.x;
+    bbl->mob.vel.y += vel.y;
+    bbl->mob.last_move = SDL_GetTicks();
     bbl->state = bumbarrel_FLY;
 }
 
@@ -287,6 +288,9 @@ static void bumbarrel_set_next_frame(bumbarrel* bbl) {
     if (bbl->frame < 0 || bbl->frame >= state->frames) {
         bbl->frame = 0;
     } else {
+        if (SDL_GetTicks() - state->delay < bbl->last_frame) {
+            return;
+        }
         random = (double) rand() / RAND_MAX;
         for (int i = 0; i < state->frames; i++) {
             if (random < state->transitions[bbl->frame][i]) {
@@ -294,6 +298,7 @@ static void bumbarrel_set_next_frame(bumbarrel* bbl) {
                 break;
             }
         }
+        bbl->last_frame = SDL_GetTicks();
     }
     bbl->src_rect.x = bbl->frame * (state->width + state->pad) + state->pad;
     bbl->src_rect.y = (bbl->mob.dir * bumbarrel_STATES_COUNT + state->index)

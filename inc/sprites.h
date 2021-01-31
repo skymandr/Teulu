@@ -39,7 +39,7 @@ typedef struct sprites_state {
     const int       pad;
     const int       height;
     const int       width;
-    const int       time;
+    const int       delay;
     const double    transitions[sprites_MAX_FRAMES][sprites_MAX_FRAMES];
 } sprites_state;
 
