@@ -10,7 +10,7 @@ ODIR = obj
 IDIR = inc
 
 # Linking:
-LDFLAGS = -lSDL -lSDL_image -lSDL_mixer -lm
+LDFLAGS = -lSDL -lSDL_image -lSDL_mixer -lSDL_gfx -lm
 
 # Compiler options:
 CFLAGS = -std=gnu99 -I$(IDIR) $(LDFLAGS)

@@ -26,6 +26,7 @@
 
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
+#include "SDL/SDL_rotozoom.h"
 
 #include "main.h"
 #include "screen.h"
@@ -36,11 +37,12 @@
 /* Global variables */
 
 SDL_Surface*    main_screen;
+SDL_Surface*    main_soft_screen;
 SDL_Surface*    main_background;
 bool            main_quit_flag = FALSE;
+bool            main_fullscreen_flag = FALSE;
+int             main_softscale = 1;
 bumbarrel       main_player;
-
-
 
 /* Function prototypes */
 
@@ -56,9 +58,39 @@ static void main_handle_mouse_press(SDL_MouseButtonEvent key);
 /* External function definitions */
 
 // Main entry function:
-int main(void) {
+int main(int argc, char* args[]) {
     int status;
 
+    if (argc > 1) {
+        for (int i = 1; i < argc; i++) {
+            if (strncmp(args[i], "-f", 2) == 0) {
+                printf("Fullscreen mode enabled\n");
+                main_fullscreen_flag = TRUE;
+            } else if (strncmp(args[i], "-s", 2) == 0) {
+                if (i == argc - 1) {
+                    printf(
+                        "Soft scale must be between 1 and 4 (got none)\n"
+                        "Aborting...\n"
+                    );
+                    return 1;
+                }
+                printf("Soft scaling mode enabled\n");
+                main_softscale = atoi(args[i+1]);
+                if (main_softscale < 1 || main_softscale > 4) {
+                    printf(
+                        "Soft scale must be between 1 and 4 (got %d)\n"
+                        "Aborting...\n",
+                        main_softscale
+                    );
+                    return 1;
+                }
+                i++;
+            } else {
+                printf("Unknown option '%s'.\nAborting...\n", args[i]);
+                return 1;
+            }
+        }
+    }
     status |= main_init();
     if (status == 0) {
         status |= main_loop();
@@ -88,10 +120,10 @@ static int main_init(void) {
 
     // Initialise screen:
     main_screen = SDL_SetVideoMode(
-        screen_WIDTH,
-        screen_HEIGHT,
+        screen_WIDTH * main_softscale,
+        screen_HEIGHT * main_softscale,
         0,
-        SDL_DOUBLEBUF | SDL_HWSURFACE
+        SDL_DOUBLEBUF | SDL_HWSURFACE | SDL_HWPALETTE
     );
     if (main_screen == NULL) {
         printf("Screen could not be created! "
@@ -99,6 +131,22 @@ static int main_init(void) {
         return 1;
     }
     SDL_WM_SetCaption(MAIN_APP_TITLE, MAIN_APP_NAME);
+    if (main_fullscreen_flag) {
+        SDL_WM_ToggleFullScreen(main_screen);
+    }
+    if (main_softscale > 1) {
+        main_soft_screen = SDL_CreateRGBSurface(
+            SDL_HWSURFACE,
+            screen_WIDTH,
+            screen_HEIGHT,
+            24, 0, 0, 0, 0
+        );
+        if (main_soft_screen == NULL) {
+            printf("Soft screen could not be created! "
+                    "SDL Error: %s\n", SDL_GetError());
+            return 1;
+        }
+    }
     
     //Initialise PNG loading:
     if(!(IMG_Init(img_flags) & img_flags)) {
@@ -112,7 +160,7 @@ static int main_init(void) {
     main_background = IMG_Load("./resources/bg.png");
 
     // Initialise player:
-    main_player = bumbarrel_init_player(470, 320);
+    main_player = bumbarrel_init_player(235, 160);
 
     return status;
 }
@@ -163,11 +211,11 @@ static void main_handle_mouse_press(SDL_MouseButtonEvent button) {
     mouse_pos = screen_screen_to_world(button.x, button.y);
     switch (button.button) {
     case SDL_BUTTON_LEFT:
-        printf("Fly: %d %d\n", button.x, button.y);
+        printf("Fly: %f %f\n", mouse_pos.x, mouse_pos.y);
         bumbarrel_fly_towards(mouse_pos, &main_player);
         break;
     case SDL_BUTTON_RIGHT:
-        printf("Eat: %d %d\n", button.x, button.y);
+        printf("Eat: %f %f\n", mouse_pos.x, mouse_pos.y);
         bumbarrel_land_now(&main_player);
         bumbarrel_face(mouse_pos, &main_player);
         break;
@@ -219,27 +267,52 @@ static void main_events(void) {
 
 
 static void main_draw(void) {
-    SDL_FillRect(main_screen, NULL, 0);
+    SDL_Surface* screen;
+
+    if (main_softscale == 1) {
+        screen = main_screen;
+    } else {
+        screen = main_soft_screen;
+    }
+    
+    SDL_FillRect(screen, NULL, 0);
     SDL_BlitSurface(
         main_background,
         NULL,
-        main_screen,
+        screen,
         NULL
     );
     SDL_BlitSurface(
         main_player.sprite,
         &(main_player.src_rect),
-        main_screen,
+        screen,
         &(main_player.rect)
     );
+
+    if (main_softscale != 1) {
+        SDL_BlitSurface(
+            rotozoomSurface(screen, 0, main_softscale, FALSE),
+            NULL,
+            main_screen,
+            NULL
+        );
+    }
+
     SDL_Flip(main_screen);
 }
 
 
 // Clean shutdown:
 static int main_quit(void) {
-    SDL_FreeSurface(main_screen);
+    if (main_fullscreen_flag) {
+        SDL_WM_ToggleFullScreen(main_screen);
+    }
+    if (main_softscale > 1) {
+        SDL_FreeSurface(main_soft_screen);
+    }
+
     SDL_Quit();
+    printf("Good bye!\n");
+
     return 0;
 }
-

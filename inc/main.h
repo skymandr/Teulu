@@ -23,7 +23,7 @@
 #ifndef TEULU_MAIN
 #define TEULU_MAIN
 
-#include <stdbool.h>
+#include "SDL/SDL.h"
 
 
 /* Global definitions */
@@ -36,5 +36,6 @@
 /* Global variables */
 
 extern SDL_Surface* main_screen;
+extern int          main_softscale;
 
 #endif

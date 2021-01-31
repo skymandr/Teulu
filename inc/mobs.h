@@ -32,7 +32,7 @@
 /* Constant definitions */
 
 #define mobs_GRAVITY    9.8 / screen_PX_TO_M
-#define mobs_DRAG       5
+#define mobs_DRAG       0.5e-2
 #define mobs_DIR_HOR    0x1
 #define mobs_DIR_VER    0x2
 #define mobs_DIR_LEFT   0x0

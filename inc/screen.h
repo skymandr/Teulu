@@ -28,17 +28,17 @@
 
 /* Definitions */
 
-#define screen_WIDTH    640
-#define screen_HEIGHT   480
+#define screen_WIDTH    320
+#define screen_HEIGHT   240
 #define screen_PAD_HOR  12
 #define screen_PAD_TOP  12
-#define screen_PAD_BTM  48
+#define screen_PAD_BTM  24
 #define screen_PX_TO_CM 1
 #define screen_CM_TO_PX 1
 #define screen_PX_TO_M  0.01
 #define screen_M_TO_PX  100
 
-// LEVEL coordinates ar logically decoupled from screen:
+// Level coordinates are logically decoupled from screen:
 #define screen_LEVEL_MIN_X screen_PAD_HOR
 #define screen_LEVEL_MIN_Y screen_PAD_BTM
 // TODO: At least MAX_X should be decoupled from screen_WIDTH:

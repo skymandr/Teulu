@@ -29,8 +29,8 @@
 
 /* Function prototypes */
 
-static void mobs_move(mobs_mob* mob);
 static void mobs_boundary_conditions(mobs_mob* mob);
+static void mobs_move(mobs_mob* mob, double timestep);
 static void mobs_stop(mobs_mob* mob, double timestep);
 static void mobs_drag(mobs_mob* mob, double timestep);
 static void mobs_gravity(mobs_mob* mob, double timestep);
@@ -43,7 +43,7 @@ void mobs_kinematics(mobs_mob* mob, double timestep) {
     mobs_gravity(mob, timestep);
     mobs_drag(mob, timestep);
     mobs_stop(mob, timestep);
-    mobs_move(mob);
+    mobs_move(mob, timestep);
     mobs_boundary_conditions(mob);
 }
 
@@ -64,9 +64,9 @@ mobs_mob mobs_new(void) {
 /* Static function definitions */
 
 // Apply velocity:
-static void mobs_move(mobs_mob* mob) {
-    mob->pos.x += mob->vel.x;
-    mob->pos.y += mob->vel.y;
+static void mobs_move(mobs_mob* mob, double timestep) {
+    mob->pos.x += mob->vel.x * timestep;
+    mob->pos.y += mob->vel.y * timestep;
 };
 
 

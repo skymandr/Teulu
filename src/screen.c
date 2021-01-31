@@ -21,6 +21,7 @@
 */
 
 #include "screen.h"
+#include "main.h"
 #include "util.h"
 
 
@@ -28,7 +29,10 @@
 
 // Convert screen coordinates to world coordinates:
 util_vector screen_screen_to_world(int x, int y) {
-    util_vector world_pos = {.x = x, .y = screen_HEIGHT - y};
+    util_vector world_pos = {
+        .x = x / main_softscale,
+        .y = screen_HEIGHT - y / main_softscale
+    };
     return world_pos;
 }
 

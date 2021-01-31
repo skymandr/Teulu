@@ -182,7 +182,7 @@ void bumbarrel_update(bumbarrel* bbl) {
         }
         break;
     default:
-        mobs_kinematics(&(bbl->mob), 1e-3);
+        mobs_kinematics(&(bbl->mob), 1e-2);
         vel = bbl->mob.vel;
         if (vel.x > 0) {
             bbl->mob.dir = (bbl->mob.dir & ~mobs_DIR_HOR) | mobs_DIR_RIGHT;
@@ -234,6 +234,9 @@ void bumbarrel_fly_towards(util_vector pos, bumbarrel* bbl) {
         .y = pos.y - bbl->mob.pos.y
     };
     float norm = sqrt(delta.x * delta.x + delta.y * delta.y);
+    if (norm == 0) {
+        return;
+    }
     util_vector speed = {
         .x = bumbarrel_SPEED * delta.x / norm,
         .y = bumbarrel_SPEED * delta.y / norm
