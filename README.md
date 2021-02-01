@@ -78,6 +78,17 @@ Remember that sitting in the middle is warmer than on the edges!
 To quit, close the window or press either _Esc_ or _Q_.
 
 
+## Requirements
+
+The game has so far only been tested on Debian GNU/Linux. It is based on
+`SDL-1.2` and may require you to install som dependencies. On a Debian-like
+system, this should do the trick:
+```console
+$ sudo apt-get install libsdl1.2debian libsdl-mixer1.2 libsdl-image1.2 \
+    libsdl-gfx1.2-5 libsdl-sound1.2 libsdl-ttf-2.0-0 libsdl-net1.2
+```
+
+
 ## License and disclaimer
 
 Teulu - A game about bumbarrels gathering food and building a family flock
