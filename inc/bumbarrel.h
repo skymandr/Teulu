@@ -42,7 +42,7 @@
 #define bumbarrel_SPRITE_SLEEP      4
 #define bumbarrel_SPRITE_SLEEP_NT   4
 #define bumbarrel_STATES_COUNT      7
-#define bumbarrel_SPEED             144
+#define bumbarrel_DASH              144
 
 
 /* Type definitions */
@@ -50,6 +50,7 @@
 typedef enum {
     bumbarrel_PERCH,
     bumbarrel_FLY,
+    bumbarrel_FLY_ACTIVE,
     bumbarrel_GLIDE,
     bumbarrel_LAND,
     bumbarrel_SLEEP,

@@ -23,6 +23,7 @@
 #include <math.h>
 
 #include "bumbarrel.h"
+#include "main.h"
 #include "mobs.h"
 #include "sprites.h"
 #include "util.h"
@@ -133,6 +134,7 @@ sprites_state bumbarrel_sleep_no_tail = {
 /* Function prototypes */
 
 static void bumbarrel_set_next_frame(bumbarrel* bbl);
+static void bumbarrel_fly_towards_cursor(bumbarrel* bbl, float timestep);
 
 
 /* External function definitions */
@@ -168,9 +170,11 @@ bumbarrel bumbarrel_init_player(int x, int y) {
 }
 
 
+// Update bumbarrel state:
 void bumbarrel_update(bumbarrel* bbl) {
     bumbarrel_state state   = bbl->state;
     mobs_velocity   vel;
+    float           timestep;
 
     switch (bbl->state) {
     case bumbarrel_SLEEP:
@@ -182,27 +186,33 @@ void bumbarrel_update(bumbarrel* bbl) {
         }
         break;
     default:
+        timestep = mobs_timestep(&(bbl->mob));
         mobs_kinematics(&(bbl->mob));
         vel = bbl->mob.vel;
+
         if (vel.x > 0) {
             bbl->mob.dir = (bbl->mob.dir & ~mobs_DIR_HOR) | mobs_DIR_RIGHT;
         } else if (vel.x < 0) {
             bbl->mob.dir = (bbl->mob.dir & ~mobs_DIR_HOR) | mobs_DIR_LEFT;
         }
-        if (vel.x == 0 && vel.y == 0) {
-            bbl->state = bumbarrel_LAND;
-            bbl->frame = -1;
+
+        if (bbl->state == bumbarrel_FLY_ACTIVE) {
+            bumbarrel_fly_towards_cursor(bbl, timestep);
         } else if (vel.y < 0 && (fabs(vel.x) < fabs(vel.y))) {
             bbl->state = bumbarrel_GLIDE;
+        } else if (vel.x == 0 && vel.y == 0) {
+            bbl->state = bumbarrel_LAND;
+            bbl->frame = -1;
+            break;
         } else {
             bbl->state = bumbarrel_FLY;
         }
+
         break;
     }
 
     bbl->rect.x = bbl->mob.pos.x + bbl->rect.w / 2;
     bbl->rect.y = screen_HEIGHT - (bbl->mob.pos.y + bbl->rect.h / 2);
-
 
     if (state != bbl->state) {
         bumbarrel_set_next_frame(bbl);
@@ -210,6 +220,8 @@ void bumbarrel_update(bumbarrel* bbl) {
     bumbarrel_set_next_frame(bbl);
 }
 
+
+// Tell bumbarrel to land where it is:
 void bumbarrel_land_now(bumbarrel* bbl) {
     bbl->mob.vel.x = 0;
     bbl->mob.vel.y = 0;
@@ -218,6 +230,7 @@ void bumbarrel_land_now(bumbarrel* bbl) {
 }
 
 
+// Tell bumbarrel to go to sleep:
 void bumbarrel_sleep_now(bumbarrel* bbl) {
     if (bbl->state != bumbarrel_PERCH) {
         return;
@@ -228,27 +241,27 @@ void bumbarrel_sleep_now(bumbarrel* bbl) {
 }
 
 
+// Make bumbarrel dash towards position:
 void bumbarrel_fly_towards(util_vector pos, bumbarrel* bbl) {
     util_vector delta = {
         .x = pos.x - bbl->mob.pos.x,
         .y = pos.y - bbl->mob.pos.y
     };
+    float dash;
     float norm = sqrt(delta.x * delta.x + delta.y * delta.y);
     if (norm == 0) {
         return;
     }
-    util_vector vel = {
-        .x = bumbarrel_SPEED * delta.x / norm,
-        .y = bumbarrel_SPEED * delta.y / norm
-    };
 
-    bbl->mob.vel.x += vel.x;
-    bbl->mob.vel.y += vel.y;
+    dash = bumbarrel_DASH / norm;
+    bbl->mob.vel.x += dash * delta.x;
+    bbl->mob.vel.y += dash * delta.y;
     bbl->mob.last_move = SDL_GetTicks();
     bbl->state = bumbarrel_FLY;
 }
 
 
+// Turn bumbarrel towards position:
 void bumbarrel_face(util_vector pos, bumbarrel* bbl) {
     if (pos.x > bbl->mob.pos.x) {
         bbl->mob.dir = (bbl->mob.dir & ~mobs_DIR_HOR) | mobs_DIR_RIGHT;
@@ -263,13 +276,14 @@ void bumbarrel_face(util_vector pos, bumbarrel* bbl) {
 // Set next frame given state:
 static void bumbarrel_set_next_frame(bumbarrel* bbl) {
     sprites_state*  state;
-    double          random;
+    float           random;
 
     switch (bbl->state) {
     case bumbarrel_PERCH:
         state = &bumbarrel_perch;
         break;
     case bumbarrel_FLY:
+    case bumbarrel_FLY_ACTIVE:
         state = &bumbarrel_fly;
         break;
     case bumbarrel_GLIDE:
@@ -291,7 +305,7 @@ static void bumbarrel_set_next_frame(bumbarrel* bbl) {
         if (SDL_GetTicks() - state->delay < bbl->last_frame) {
             return;
         }
-        random = (double) rand() / RAND_MAX;
+        random = (float) rand() / RAND_MAX;
         for (int i = 0; i < state->frames; i++) {
             if (random < state->transitions[bbl->frame][i]) {
                 bbl->frame = i;
@@ -303,4 +317,28 @@ static void bumbarrel_set_next_frame(bumbarrel* bbl) {
     bbl->src_rect.x = bbl->frame * (state->width + state->pad) + state->pad;
     bbl->src_rect.y = (bbl->mob.dir * bumbarrel_STATES_COUNT + state->index)
                       * (state->height + state->pad) + state->pad;
+}
+
+
+// Make bumbarrel fly towards cursor:
+static void bumbarrel_fly_towards_cursor(bumbarrel* bbl, float timestep) {
+    int         x, y;
+    util_vector pos, delta;
+    float       norm, speed;
+
+    bbl->state = bumbarrel_FLY_ACTIVE;
+
+    SDL_GetMouseState(&x, &y);
+    pos = screen_screen_to_world(x, y);
+    delta.x = pos.x - bbl->mob.pos.x;
+    delta.y = pos.y - bbl->mob.pos.y;
+    norm = sqrt(delta.x * delta.x + delta.y * delta.y);
+    if (norm == 0) {
+        return;
+    }
+
+    speed = bbl->mob.gravity * timestep / norm;
+    printf("%f\n", speed);
+    bbl->mob.vel.x += speed * delta.x;
+    bbl->mob.vel.y += speed * delta.y;
 }

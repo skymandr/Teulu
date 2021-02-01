@@ -11,11 +11,12 @@
 _Teulu_ is a game about bumbarrels – or _long-tailed tits_ – gathering food
 and building a family flock through the four seasons.
 
-Pleas note that most features listed below are not implemented, but are to be
-regarded as a statement of intent.
+Please note that most features listed below are not implemented, but are to
+be regarded as a statement of intent.
 
 
 ## How to run
+
 The game has only been built and tested under GNU/Linux. To start the game on
 GNU/Linux, go to the game directory and write
 ```console
@@ -31,6 +32,9 @@ to scale the window to 960x720 pixels.
 
 There is also a `-f` flag to force full screen mode, however, since this may mess up your
 display settings it is not recommended. Use at your own peril!
+
+You may need to install some requirements in order to get it to start. See
+_Requirements_ below for more information.
 
 
 ## Objective
@@ -55,8 +59,8 @@ Gather food, avoid predators, bring food to your family, and enjoy the sun!
 ## Controls
 
 Use _Select_ (left mouse key) to fly towards a the pointer. Holding the button
-will lead to continuous flight, clicking will result in a single hop. Flying
-takes energy, so be smart about it!
+will lead to continuous flight, doubl-clicking will result in a single hop.
+Flying takes energy, so be smart about it!
 
 Use _Adjust_ (right mouse key) to interact with the environment: eat bugs and
 other food and pick up materials. Use _Shift+Adjust_ to catch a bug or pick

@@ -25,6 +25,7 @@
 #include "SDL/SDL.h"
 
 #include "mobs.h"
+#include "main.h"
 #include "screen.h"
 #include "util.h"
 
@@ -32,21 +33,17 @@
 /* Function prototypes */
 
 static void mobs_boundary_conditions(mobs_mob* mob);
-static void mobs_move(mobs_mob* mob, double timestep);
+static void mobs_move(mobs_mob* mob, float timestep);
 static void mobs_stop(mobs_mob* mob);
-static void mobs_drag(mobs_mob* mob, double timestep);
-static void mobs_gravity(mobs_mob* mob, double timestep);
+static void mobs_drag(mobs_mob* mob, float timestep);
+static void mobs_gravity(mobs_mob* mob, float timestep);
 
 
 /* External function definitions */
 
 // Move a mob:
 void mobs_kinematics(mobs_mob* mob) {
-    double timestep = (double) (SDL_GetTicks() - mob->last_move) / 1000.0;
-
-    if (timestep <= 0) {
-        return;
-    }
+    float timestep = mobs_timestep(mob);
 
     mobs_gravity(mob, timestep);
     mobs_drag(mob, timestep);
@@ -58,6 +55,17 @@ void mobs_kinematics(mobs_mob* mob) {
 }
 
 
+// Get mob timestep:
+float mobs_timestep(mobs_mob* mob) {
+    float timestep = (float) (SDL_GetTicks() - mob->last_move) / 1000.0;
+    if (timestep < 0 || timestep > 2.0 / MAIN_APP_FRAMERATE) {
+        return 1.0 / MAIN_APP_FRAMERATE;
+    }
+    return timestep;
+}
+
+
+// Get a new mob:
 mobs_mob mobs_new(void) {
     mobs_mob mob = {
         .pos = {.x = 0, .y = 0},
@@ -74,7 +82,7 @@ mobs_mob mobs_new(void) {
 /* Static function definitions */
 
 // Apply velocity:
-static void mobs_move(mobs_mob* mob, double timestep) {
+static void mobs_move(mobs_mob* mob, float timestep) {
     mob->pos.x += mob->vel.x * timestep;
     mob->pos.y += mob->vel.y * timestep;
 }
@@ -119,7 +127,7 @@ static void mobs_stop(mobs_mob* mob) {
 
 
 // Apply gravity:
-static void mobs_gravity(mobs_mob* mob, double timestep) {
+static void mobs_gravity(mobs_mob* mob, float timestep) {
     if (mob->gravity > 0) {
         mob->vel.y -= 0.5 * mob->gravity * timestep;
     }
@@ -127,11 +135,13 @@ static void mobs_gravity(mobs_mob* mob, double timestep) {
 
 
 // Apply drag friction:
-static void mobs_drag(mobs_mob* mob, double timestep) {
-    double drag;
+static void mobs_drag(mobs_mob* mob, float timestep) {
+    float drag;
     if (mob->drag.x > 0 && mob->vel.x != 0) {
         drag = 0.5 * mob->drag.x * mob->vel.x * mob->vel.x * timestep;
-        if (mob->vel.x > 0) {
+        if (drag > fabs(mob->vel.x)) {
+            mob->vel.x = 0;
+        } else if (mob->vel.x > 0) {
             mob->vel.x -= drag;
         } else {
             mob->vel.x += drag;
@@ -139,7 +149,9 @@ static void mobs_drag(mobs_mob* mob, double timestep) {
     }
     if (mob->drag.y > 0 && mob->vel.y != 0) {
         drag = 0.5 * mob->drag.y * mob->vel.y * mob->vel.y * timestep;
-        if (mob->vel.y > 0) {
+        if (drag > fabs(mob->vel.y)) {
+            mob->vel.y = 0;
+        } else if (mob->vel.y > 0) {
             mob->vel.y -= 0.5 * drag;
         } else {
             mob->vel.y += drag;

@@ -55,7 +55,7 @@ typedef struct mobs_mob {
     mobs_position   pos;
     mobs_friction   drag;
     mobs_direction  dir;
-    double          gravity;
+    float           gravity;
     bool            periodic;
     int             last_move;
 } mobs_mob;
@@ -63,10 +63,8 @@ typedef struct mobs_mob {
 
 /* Function prototypes */
 
-// Move a mob:
 void mobs_kinematics(mobs_mob* mob);
-
-// Get a new mob:
+float mobs_timestep(mobs_mob* mob);
 mobs_mob mobs_new(void);
 
 #endif

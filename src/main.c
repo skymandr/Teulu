@@ -42,6 +42,9 @@ SDL_Surface*    main_background;
 bool            main_quit_flag = FALSE;
 bool            main_fullscreen_flag = FALSE;
 int             main_softscale = 1;
+uint            main_select_click_time = 0;
+uint            main_adjust_click_time = 0;
+uint            main_dbl_clk_delay = MAIN_APP_DBL_CLK;
 bumbarrel       main_player;
 
 /* Function prototypes */
@@ -202,27 +205,59 @@ static void main_handle_key_press(SDL_KeyboardEvent key) {
 
 // Handle mouse interaction:
 static void main_handle_mouse_press(SDL_MouseButtonEvent button) {
-    util_vector     mouse_pos;
+    util_vector mouse_pos   = screen_screen_to_world(button.x, button.y);
+    uint        time        = SDL_GetTicks();
 
-    if (button.type == SDL_MOUSEBUTTONUP) {
-        return;
-    }
-
-    mouse_pos = screen_screen_to_world(button.x, button.y);
-    switch (button.button) {
-    case SDL_BUTTON_LEFT:
-        printf("Fly: %f %f\n", mouse_pos.x, mouse_pos.y);
-        bumbarrel_fly_towards(mouse_pos, &main_player);
+    switch (button.type) {
+    case SDL_MOUSEBUTTONDOWN:
+        switch (button.button) {
+        case SDL_BUTTON_LEFT:
+            printf("Fly: %f %f\n", mouse_pos.x, mouse_pos.y);
+            main_player.state = bumbarrel_FLY_ACTIVE;
+            bumbarrel_face(mouse_pos, &main_player);
+            break;
+        case SDL_BUTTON_RIGHT:
+            printf(
+                "Eat: %f %f\n",
+                main_player.mob.pos.x,
+                main_player.mob.pos.y
+            );
+            bumbarrel_face(mouse_pos, &main_player);
+            break;
+        default:
+            break;
+        }
         break;
-    case SDL_BUTTON_RIGHT:
-        printf("Eat: %f %f\n", mouse_pos.x, mouse_pos.y);
-        bumbarrel_land_now(&main_player);
-        bumbarrel_face(mouse_pos, &main_player);
+    case SDL_MOUSEBUTTONUP:
+        switch (button.button) {
+        case SDL_BUTTON_LEFT:
+            if (time - main_select_click_time < main_dbl_clk_delay) {
+                printf("Dash: %f, %f\n", mouse_pos.x, mouse_pos.y);
+                bumbarrel_fly_towards(mouse_pos, &main_player);
+            }
+            if (main_player.state == bumbarrel_FLY_ACTIVE) {
+                main_player.state = bumbarrel_FLY;
+            }
+            main_select_click_time = time;
+            break;
+        case SDL_BUTTON_RIGHT:
+            if (time - main_adjust_click_time < main_dbl_clk_delay) {
+                printf(
+                    "Land: %f, %f\n",
+                    main_player.mob.pos.x,
+                    main_player.mob.pos.y
+                );
+                bumbarrel_land_now(&main_player);
+            }
+            main_adjust_click_time = time;
+            break;
+        default:
+            break;
+        }
         break;
     default:
         break;
     }
-
 }
 
 

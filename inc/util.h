@@ -33,8 +33,8 @@
 /* Type definitions */
 
 typedef struct util_vector {
-    double x;
-    double y;
+    float x;
+    float y;
 } util_vector;
 
 #endif
