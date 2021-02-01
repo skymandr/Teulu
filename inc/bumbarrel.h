@@ -42,7 +42,7 @@
 #define bumbarrel_SPRITE_SLEEP      4
 #define bumbarrel_SPRITE_SLEEP_NT   4
 #define bumbarrel_STATES_COUNT      7
-#define bumbarrel_DASH              144
+#define bumbarrel_DASH              320
 
 
 /* Type definitions */

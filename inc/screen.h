@@ -42,8 +42,8 @@
 #define screen_LEVEL_MIN_X screen_PAD_HOR
 #define screen_LEVEL_MIN_Y screen_PAD_BTM
 // TODO: At least MAX_X should be decoupled from screen_WIDTH:
-#define screen_LEVEL_MAX_X (screen_WIDTH - 2 * screen_PAD_HOR)
-#define screen_LEVEL_MAX_Y (screen_HEIGHT - screen_PAD_TOP - screen_PAD_BTM)
+#define screen_LEVEL_MAX_X (screen_WIDTH - screen_PAD_HOR * 2)
+#define screen_LEVEL_MAX_Y (screen_HEIGHT - screen_PAD_TOP)
 
 
 /* Function prototypes */

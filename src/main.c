@@ -183,18 +183,26 @@ static void main_handle_key_press(SDL_KeyboardEvent key) {
         break;
     case SDLK_c:
         if (key.state == SDL_PRESSED) {
+            if (main_player.state == bumbarrel_SLEEP) {
+                main_player.state = bumbarrel_PERCH;
+            }
             printf("Call!\n");
         }
         break;
     case SDLK_x:
         if (key.state == SDL_PRESSED) {
+            if (main_player.state == bumbarrel_SLEEP) {
+                main_player.state = bumbarrel_PERCH;
+            }
             printf("Warn!\n");
         }
         break;
     case SDLK_z:
         if (key.state == SDL_PRESSED) {
-            printf("Sleep...\n");
-            bumbarrel_sleep_now(&main_player);
+            if (main_player.state == bumbarrel_PERCH) {
+                printf("Sleep...\n");
+                bumbarrel_sleep_now(&main_player);
+            }
         }
         break;
     default:
@@ -212,8 +220,14 @@ static void main_handle_mouse_press(SDL_MouseButtonEvent button) {
     case SDL_MOUSEBUTTONDOWN:
         switch (button.button) {
         case SDL_BUTTON_LEFT:
-            printf("Fly: %f %f\n", mouse_pos.x, mouse_pos.y);
+            if (time - main_select_click_time <= main_dbl_clk_delay) {
+                printf("Dash: %f, %f\n", mouse_pos.x, mouse_pos.y);
+                bumbarrel_fly_towards(mouse_pos, &main_player);
+            } else {
+                printf("Fly: %f %f\n", mouse_pos.x, mouse_pos.y);
+            }
             main_player.state = bumbarrel_FLY_ACTIVE;
+            main_select_click_time = time;
             bumbarrel_face(mouse_pos, &main_player);
             break;
         case SDL_BUTTON_RIGHT:
@@ -231,14 +245,9 @@ static void main_handle_mouse_press(SDL_MouseButtonEvent button) {
     case SDL_MOUSEBUTTONUP:
         switch (button.button) {
         case SDL_BUTTON_LEFT:
-            if (time - main_select_click_time < main_dbl_clk_delay) {
-                printf("Dash: %f, %f\n", mouse_pos.x, mouse_pos.y);
-                bumbarrel_fly_towards(mouse_pos, &main_player);
-            }
             if (main_player.state == bumbarrel_FLY_ACTIVE) {
                 main_player.state = bumbarrel_FLY;
             }
-            main_select_click_time = time;
             break;
         case SDL_BUTTON_RIGHT:
             if (time - main_adjust_click_time < main_dbl_clk_delay) {

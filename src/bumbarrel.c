@@ -254,6 +254,8 @@ void bumbarrel_fly_towards(util_vector pos, bumbarrel* bbl) {
     }
 
     dash = bumbarrel_DASH / norm;
+    bbl->mob.vel.x *= 0.1;
+    bbl->mob.vel.y *= 0.1;
     bbl->mob.vel.x += dash * delta.x;
     bbl->mob.vel.y += dash * delta.y;
     bbl->mob.last_move = SDL_GetTicks();
@@ -338,7 +340,6 @@ static void bumbarrel_fly_towards_cursor(bumbarrel* bbl, float timestep) {
     }
 
     speed = bbl->mob.gravity * timestep / norm;
-    printf("%f\n", speed);
     bbl->mob.vel.x += speed * delta.x;
     bbl->mob.vel.y += speed * delta.y;
 }

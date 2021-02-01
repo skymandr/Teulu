@@ -35,7 +35,7 @@ dist: teulu
 	mkdir -p Teulu
 	cp teulu Teulu
 	cp -r resources Teulu
-	cp README.md LICENSE Teulu
+	cp README.md LICENSE ReleaseNotes.md Teulu
 	zip -r $(BINARY).zip Teulu/
 
 .PHONY: clean, cleanall
