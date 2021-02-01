@@ -85,7 +85,7 @@ The game has so far only been tested on Debian GNU/Linux. It is based on
 system, this should do the trick:
 ```console
 $ sudo apt-get install libsdl1.2debian libsdl-mixer1.2 libsdl-image1.2 \
-    libsdl-gfx1.2-5 libsdl-sound1.2 libsdl-ttf-2.0-0 libsdl-net1.2
+    libsdl-gfx1.2-5 libsdl-sound1.2 libsdl-ttf2.0-0 libsdl-net1.2
 ```
 
 
