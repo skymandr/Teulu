@@ -1,3 +1,18 @@
+# Teulu v0.0.4 (2021-02-03)
+## Improved soft-scaling, sprite positioning, and UI mockup
+
+The major feature of this release is that it fixes the soft-scaling so that
+it is nearly as fast as running in native resolution. I find this improves
+the experience greatly!
+
+Other than that, this release also fixes a bug in the positioning of the
+bumbarrel sprite, which was causing the bird to consistently miss the
+pointer. The temporary background has also been replaced (again), with a
+version with kinder contrast, and a mock-up of where UI elements may one day
+show up.
+
+
+--------------
 # Teulu v0.0.3 (2021-02-02)
 ## Reworked controls and documentation
 

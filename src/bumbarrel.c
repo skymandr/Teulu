@@ -213,8 +213,8 @@ void bumbarrel_update(bumbarrel* bbl) {
     }
 
     rect = screen_world_to_screen(bbl->mob.pos);
-    bbl->rect.x = rect.x - bbl->rect.w / 2;
-    bbl->rect.y = rect.y - bbl->rect.h / 2;
+    bbl->rect.x = (int) round(rect.x - bbl->rect.w / 2);
+    bbl->rect.y = (int) round(rect.y - bbl->rect.h / 2);
 
     if (state != bbl->state) {
         bumbarrel_set_next_frame(bbl);

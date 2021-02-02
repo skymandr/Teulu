@@ -140,12 +140,16 @@ static int main_init(void) {
         SDL_WM_ToggleFullScreen(main_screen);
     }
     if (main_softscale > 1) {
-        main_soft_screen = SDL_CreateRGBSurface(
+        temp_surface = SDL_CreateRGBSurface(
             SDL_HWSURFACE,
             screen_WIDTH,
             screen_HEIGHT,
-            24, 0, 0, 0, 0
+            0, 0, 0, 0, 0
         );
+        opt_surface = SDL_ConvertSurface(temp_surface, main_screen->format, 0);
+        main_soft_screen = SDL_DisplayFormat(opt_surface);
+        SDL_FreeSurface(temp_surface);
+        SDL_FreeSurface(opt_surface);
         if (main_soft_screen == NULL) {
             printf("Soft screen could not be created! "
                     "SDL Error: %s\n", SDL_GetError());
@@ -344,7 +348,12 @@ static void main_draw(void) {
     );
 
     if (main_softscale != 1) {
-        SDL_Surface* scaled = rotozoomSurface(screen, 0, main_softscale, FALSE);
+        SDL_Surface* scaled = zoomSurface(
+            screen,
+            main_softscale,
+            main_softscale,
+            FALSE
+        );
         SDL_BlitSurface(
             scaled,
             NULL,
