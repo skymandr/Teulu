@@ -30,9 +30,9 @@
 
 #define screen_WIDTH    640
 #define screen_HEIGHT   480
-#define screen_PAD_HOR  12
-#define screen_PAD_TOP  12
-#define screen_PAD_BTM  24
+#define screen_PAD_HOR  6
+#define screen_PAD_TOP  16
+#define screen_PAD_BTM  56
 #define screen_PX_TO_CM 1
 #define screen_CM_TO_PX 1
 #define screen_PX_TO_M  0.01
