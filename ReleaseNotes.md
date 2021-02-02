@@ -2,8 +2,8 @@
 ## Improved soft-scaling, sprite positioning, and UI mockup
 
 The major feature of this release is that it fixes the soft-scaling so that
-it is nearly as fast as running in native resolution. I find this improves
-the experience greatly!
+it is (nearly) as fast as running in native resolution. I find this improves
+the experience greatly! Press `f` to toggle printing fps to the terminal.
 
 Other than that, this release also fixes a bug in the positioning of the
 bumbarrel sprite, which was causing the bird to consistently miss the

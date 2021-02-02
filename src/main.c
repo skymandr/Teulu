@@ -41,6 +41,7 @@ SDL_Surface*    main_soft_screen;
 SDL_Surface*    main_background;
 bool            main_quit_flag = FALSE;
 bool            main_fullscreen_flag = FALSE;
+bool            main_framerate_flag = FALSE;
 int             main_softscale = 1;
 uint            main_select_click_time = 0;
 uint            main_adjust_click_time = 0;
@@ -191,6 +192,11 @@ static void main_handle_key_press(SDL_KeyboardEvent key) {
             SDL_PushEvent((SDL_Event*) &quit);
         }
         break;
+    case SDLK_f:
+        if (key.state == SDL_PRESSED) {
+            main_framerate_flag ^= TRUE;
+        }
+        break;
     case SDLK_c:
         if (key.state == SDL_PRESSED) {
             if (main_player.state == bumbarrel_SLEEP) {
@@ -286,10 +292,12 @@ static int main_loop(void) {
 
     while(!main_quit_flag) {
         main_events();
-        if (SDL_GetTicks() - last_update > 1000 / MAIN_APP_FRAMERATE) {
+        if (SDL_GetTicks() - last_update >= 1000 / MAIN_APP_FRAMERATE) {
+            if (main_framerate_flag) {
+                printf("%f\n", 1000 / (float) (SDL_GetTicks() - last_update));
+            }
             bumbarrel_update(&main_player);
             main_draw();
-            printf("%f\n", 1000 / (float) (SDL_GetTicks() - last_update));
             last_update = SDL_GetTicks();
         }
     }
@@ -376,6 +384,7 @@ static int main_quit(void) {
         SDL_FreeSurface(main_soft_screen);
     }
 
+    IMG_Quit();
     SDL_Quit();
     printf("Good bye!\n");
 
