@@ -70,10 +70,26 @@ sprites_state bumbarrel_fly = {
     .transitions = {
         {0.0, 0.8, 0.0, 0.0, 1.0, 0.0},
         {0.2, 0.0, 0.6, 0.7, 0.0, 1.0},
-        {0.3, 0.0, 0.6, 0.0, 0.8, 1.0},
+        {0.3, 0.0, 0.6, 0.8, 0.0, 1.0},
         {0.0, 0.6, 0.0, 0.0, 1.0, 0.0},
         {0.3, 0.0, 0.6, 0.8, 0.0, 1.0},
-        {0.2, 0.0, 0.5, 0.0, 0.7, 1.0},
+        {0.2, 0.0, 0.5, 0.7, 0.0, 1.0},
+    }
+};
+sprites_state bumbarrel_fly_active = {
+    .index  = bumbarrel_SPRITE_FLY,
+    .frames = 6,
+    .pad    = bumbarrel_SPRITE_OFFS,
+    .width  = bumbarrel_SPRITE_SIZE,
+    .height = bumbarrel_SPRITE_SIZE,
+    .delay   = 111,
+    .transitions = {
+        {0.0, 0.8, 0.0, 0.0, 1.0, 0.0},
+        {0.3, 0.0, 0.6, 0.8, 0.0, 1.0},
+        {0.4, 0.0, 0.6, 0.8, 0.0, 1.0},
+        {0.0, 0.6, 0.0, 0.0, 1.0, 0.0},
+        {0.3, 0.0, 0.5, 0.8, 0.0, 1.0},
+        {0.3, 0.0, 0.5, 0.8, 0.0, 1.0},
     }
 };
 sprites_state bumbarrel_glide = {
@@ -287,8 +303,10 @@ static void bumbarrel_set_next_frame(bumbarrel* bbl) {
         state = &bumbarrel_perch;
         break;
     case bumbarrel_FLY:
-    case bumbarrel_FLY_ACTIVE:
         state = &bumbarrel_fly;
+        break;
+    case bumbarrel_FLY_ACTIVE:
+        state = &bumbarrel_fly_active;
         break;
     case bumbarrel_GLIDE:
         state = &bumbarrel_glide;
