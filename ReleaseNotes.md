@@ -11,6 +11,7 @@ Aside from this, the code has been refactored a bit, some minor issues fixed,
 screen has been increased to 640x480 from 320x240 (not sure which is better),
 and release notes have been included in the build.
 
+
 --------------
 # Teulu v0.0.2 (2021-02-01)
 ## Fix memory leak
