@@ -108,6 +108,8 @@ int main(int argc, char* args[]) {
 
 // Initialise application:
 static int main_init(void) {
+    SDL_Surface*    temp_surface;
+    SDL_Surface*    opt_surface;
     int status      = 0;
     int img_flags   = IMG_INIT_PNG;
 
@@ -160,10 +162,14 @@ static int main_init(void) {
 
     // Initialise sprites:
     status |= sprites_init();
-    main_background = IMG_Load("./resources/bg.png");
+    temp_surface = IMG_Load("./resources/bg.png");
+    opt_surface = SDL_ConvertSurface(temp_surface, main_screen->format, 0);
+    main_background = SDL_DisplayFormat(opt_surface);
+    SDL_FreeSurface(temp_surface);
+    SDL_FreeSurface(opt_surface);
 
     // Initialise player:
-    main_player = bumbarrel_init_player(235, 160);
+    main_player = bumbarrel_init_player(470, 320);
 
     return status;
 }
@@ -279,6 +285,7 @@ static int main_loop(void) {
         if (SDL_GetTicks() - last_update > 1000 / MAIN_APP_FRAMERATE) {
             bumbarrel_update(&main_player);
             main_draw();
+            printf("%f\n", 1000 / (float) (SDL_GetTicks() - last_update));
             last_update = SDL_GetTicks();
         }
     }

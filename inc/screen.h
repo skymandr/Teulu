@@ -28,8 +28,8 @@
 
 /* Definitions */
 
-#define screen_WIDTH    320
-#define screen_HEIGHT   240
+#define screen_WIDTH    640
+#define screen_HEIGHT   480
 #define screen_PAD_HOR  12
 #define screen_PAD_TOP  12
 #define screen_PAD_BTM  24

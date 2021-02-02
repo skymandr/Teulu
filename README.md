@@ -19,19 +19,17 @@ be regarded as a statement of intent.
 
 The game has only been built and tested under GNU/Linux. To start the game on
 GNU/Linux, go to the game directory and write
+
 ```console
 $ ./teulu
 ```
 
-Note that the game natively runs windowed in 320x240 resolution. To up scale the window,
-use the `-s n` flag, where `n` is an integer upscaling factor, _e.g._
-```console
-$ ./teulu -s 3
-```
-to scale the window to 960x720 pixels.
+Note that the game natively runs windowed in 640x480 resolution. To up scale
+the window, use the `-s n` flag, where `n` is an integer upscaling factor,
+_e.g._ ```console $ ./teulu -s 3 ``` to scale the window to 960x720 pixels.
 
-There is also a `-f` flag to force full screen mode, however, since this may mess up your
-display settings it is not recommended. Use at your own peril!
+There is also a `-f` flag to force full screen mode, however, since this may
+mess up your display settings it is not recommended. Use at your own peril!
 
 You may need to install some requirements in order to get it to start. See
 _Requirements_ below for more information.
@@ -58,9 +56,9 @@ Gather food, avoid predators, bring food to your family, and enjoy the sun!
 
 ## Controls
 
-Use _Select_ (left mouse key) to fly towards a the pointer. Holding the button
-will lead to continuous flight, doubl-clicking will result in a single hop, or
-a dash if airborne. Flying takes energy, so be smart about it!
+Use _Select_ (left mouse key) to fly towards a the pointer. Holding the
+button will lead to continuous flight, doubl-clicking will result in a single
+hop, or a dash if airborne. Flying takes energy, so be smart about it!
 
 Use _Adjust_ (right mouse key) to interact with the environment: eat bugs and
 other food and pick up materials. Use _Shift+Adjust_ to catch a bug or pick
@@ -87,6 +85,7 @@ To quit, close the window or press either _Esc_ or _Q_.
 The game has so far only been tested on Debian GNU/Linux. It is based on
 `SDL-1.2` and may require you to install som dependencies. On a Debian-like
 system, this should do the trick:
+
 ```console
 $ sudo apt-get install libsdl1.2debian libsdl-mixer1.2 libsdl-image1.2 \
     libsdl-gfx1.2-5 libsdl-sound1.2 libsdl-ttf2.0-0 libsdl-net1.2

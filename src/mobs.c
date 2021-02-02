@@ -58,8 +58,10 @@ void mobs_kinematics(mobs_mob* mob) {
 // Get mob timestep:
 float mobs_timestep(mobs_mob* mob) {
     float timestep = (float) (SDL_GetTicks() - mob->last_move) / 1000.0;
-    if (timestep < 0 || timestep > 2.0 / MAIN_APP_FRAMERATE) {
-        return 1.0 / MAIN_APP_FRAMERATE;
+    if (timestep < 0 ) {
+        return 0;
+    } else if (timestep > 4.0 / MAIN_APP_FRAMERATE) {
+        return 4.0 / MAIN_APP_FRAMERATE;
     }
     return timestep;
 }

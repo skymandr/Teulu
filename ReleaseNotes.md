@@ -8,6 +8,7 @@ the documentation says: Double-clicking the right mouse button now makes the
 bird perch, while single click just changes direction.
 
 Aside from this, the code has been refactored a bit, some minor issues fixed,
+screen has been increased to 640x480 from 320x240 (not sure which is better),
 and release notes have been included in the build.
 
 --------------
