@@ -174,6 +174,7 @@ bumbarrel bumbarrel_init_player(int x, int y) {
 void bumbarrel_update(bumbarrel* bbl) {
     bumbarrel_state state   = bbl->state;
     mobs_velocity   vel;
+    util_vector     rect;
     float           timestep;
 
     switch (bbl->state) {
@@ -211,8 +212,9 @@ void bumbarrel_update(bumbarrel* bbl) {
         break;
     }
 
-    bbl->rect.x = bbl->mob.pos.x + bbl->rect.w / 2;
-    bbl->rect.y = screen_HEIGHT - (bbl->mob.pos.y + bbl->rect.h / 2);
+    rect = screen_world_to_screen(bbl->mob.pos);
+    bbl->rect.x = rect.x - bbl->rect.w / 2;
+    bbl->rect.y = rect.y - bbl->rect.h / 2;
 
     if (state != bbl->state) {
         bumbarrel_set_next_frame(bbl);
