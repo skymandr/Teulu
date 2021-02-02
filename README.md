@@ -12,21 +12,17 @@ _Teulu_ is a game about bumbarrels – or _long-tailed tits_ – gathering food
 and building a family flock through the four seasons.
 
 Please note that most features listed below are not implemented, but are to
-be regarded as a statement of intent.
+be regarded as statements of intent.
 
 
 ## How to run
 
 The game has only been built and tested under GNU/Linux. To start the game on
-GNU/Linux, go to the game directory and write
-
-```console
-$ ./teulu
-```
+GNU/Linux, go to the game directory and write `$ ./teulu`.
 
 Note that the game natively runs windowed in 640x480 resolution. To up scale
 the window, use the `-s n` flag, where `n` is an integer upscaling factor,
-_e.g._ ```console $ ./teulu -s 3 ``` to scale the window to 960x720 pixels.
+_e.g._ `$ ./teulu -s 2` to scale the window to 1280x960 pixels.
 
 There is also a `-f` flag to force full screen mode, however, since this may
 mess up your display settings it is not recommended. Use at your own peril!
