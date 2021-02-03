@@ -53,8 +53,8 @@ Gather food, avoid predators, bring food to your family, and enjoy the sun!
 ## Controls
 
 Use _Select_ (left mouse key) to fly towards a the pointer. Holding the
-button will lead to continuous flight, doubl-clicking will result in a single
-hop, or a dash if airborne. Flying takes energy, so be smart about it!
+button will lead to continuous flight, double-clicking will result in a
+single hop, or a dash if airborne. Flying takes energy, so be smart about it!
 
 Use _Adjust_ (right mouse key) to interact with the environment: eat bugs and
 other food and pick up materials. Use _Shift+Adjust_ to catch a bug or pick
