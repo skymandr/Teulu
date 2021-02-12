@@ -106,7 +106,7 @@ Again, there are a few other `SDL1.2` development packages. These should not be
 necessary to build Teulu at the moment, but may be required in the future:
 
 ```console
-$ sudo apt-get install libsdlmixer1.2-dev libsdl-sound1.2-dev libsdl-ttf2.0-dev libsdl-net1.2-dev
+$ sudo apt-get install libsdl-mixer1.2-dev libsdl-sound1.2-dev libsdl-ttf2.0-dev libsdl-net1.2-dev
 ```
 
 
