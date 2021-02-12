@@ -83,8 +83,30 @@ The game has so far only been tested on Debian GNU/Linux. It is based on
 system, this should do the trick:
 
 ```console
-$ sudo apt-get install libsdl1.2debian libsdl-mixer1.2 libsdl-image1.2 \
-    libsdl-gfx1.2-5 libsdl-sound1.2 libsdl-ttf2.0-0 libsdl-net1.2
+$ sudo apt-get install libsdl1.2debian libsdl-image1.2 libsdl-gfx1.2-5
+```
+
+Additional dependencies for `SDL1.2` are these, though they should not be
+needed at the moment:
+
+```console
+$ sudo apt-get install libsdl-mixer1.2 libsdl-sound1.2 libsdl-ttf2.0-0 libsdl-net1.2
+```
+
+### Build requirements
+
+If you want to build Teulu from source you need the development headers as
+well. These can be installed using this command on a Debian-like system:
+
+```console
+$ sudo apt-get install libsdl1.2-dev libsdl-image1.2-dev libsdl-gfx1.2-dev
+```
+
+Again, there are a few other `SDL1.2` development packages. These should not be
+necessary to build Teulu at the moment, but may be required in the future:
+
+```console
+$ sudo apt-get install libsdlmixer1.2-dev libsdl-sound1.2-dev libsdl-ttf2.0-dev libsdl-net1.2-dev
 ```
 
 
