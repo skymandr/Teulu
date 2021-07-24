@@ -46,8 +46,9 @@ Gather food, avoid predators, make new friends, and keep them safe and warm!
 ### Spring
 Gather food, avoid predators, make a nest, and bring food to your family!
 
-### Spring
-Gather food, avoid predators, bring food to your family, and enjoy the sun!
+### Summer
+Gather food, avoid predators, bring your family to food, and enjoy the sun!
+Don't forget to hydrate!
 
 
 ## Controls
