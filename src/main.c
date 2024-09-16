@@ -1,6 +1,6 @@
  /*
  *  Teulu - A game about bumbarrels gathering food and building a family
- *  Copyright (C) 2021  Andreas Skyman (Bumbarrel Computing)
+ *  Copyright (C) 2021  Ida-Sofia Skyman (Bumbarrel Computing)
  * 
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
